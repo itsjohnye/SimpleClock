@@ -29,7 +29,6 @@ struct ClockView: View {
                             .onReceive(timer) { input in
                                 date = input.formatDate()
                             }
-                            .brightness(Double(brightValue))
                         Spacer()
                     }
                     HStack(alignment: .bottom, spacing: -10) {
@@ -40,18 +39,17 @@ struct ClockView: View {
                             .onReceive(timer) { input in
                                 hoursAndMinutes = input.formatHoursAndMinutes()
                             }
-                            .brightness(Double(brightValue))
                         Text(seconds)
                             .font(.custom("Helvetica", size: 20, relativeTo: .caption))
                             .onReceive(timer) { input in
                                 seconds = input.formatSeconds()
                             }
                             .frame(width: 30)
-                            .brightness(Double(brightValue))
                     }
                     
                     Spacer()
                 }
+                .brightness(Double(brightValue))
                 .frame(width: geo.size.width * 0.8, height: geo.size.height * 0.8)
                 .foregroundColor(.white)
                 .minimumScaleFactor(0.01)
