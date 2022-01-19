@@ -8,34 +8,50 @@
 import SwiftUI
 
 struct ClockView: View {
+    @State var date = ""
     @State var hoursAndMinutes = ""
     @State var seconds = ""
     @State var brightValue = 0.0    // -1(dark) ~ 0(bright)
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
+        
         GeometryReader{ geo in
             ZStack {
                 Color.black
                     .ignoresSafeArea()
-                
-                HStack(alignment: .bottom, spacing: -10) {
-                    Text(hoursAndMinutes)
-                        .font(.custom("Helvetica", size: 500, relativeTo: .largeTitle))
-                        .fontWeight(.medium)
-                        .onReceive(timer) { input in
-                            hoursAndMinutes = input.formatHoursAndMinutes()
-                        }
-                        .brightness(Double(brightValue))
-                    Text(seconds)
-                        .font(.custom("Helvetica", size: 20, relativeTo: .caption))
-                        .onReceive(timer) { input in
-                            seconds = input.formatSeconds()
-                        }
-                        .frame(width: 30)
-                        .brightness(Double(brightValue))
+                VStack {
+                    Spacer()
+                    HStack{
+                        Text(date)
+                            .font(.custom("Helvetica", size: 20, relativeTo: .caption))
+                            .fontWeight(.medium)
+                            .onReceive(timer) { input in
+                                date = input.formatDate()
+                            }
+                            .brightness(Double(brightValue))
+                        Spacer()
+                    }
+                    HStack(alignment: .bottom, spacing: -10) {
+                        
+                        Text(hoursAndMinutes)
+                            .font(.custom("Helvetica", size: 500, relativeTo: .largeTitle))
+                            .fontWeight(.medium)
+                            .onReceive(timer) { input in
+                                hoursAndMinutes = input.formatHoursAndMinutes()
+                            }
+                            .brightness(Double(brightValue))
+                        Text(seconds)
+                            .font(.custom("Helvetica", size: 20, relativeTo: .caption))
+                            .onReceive(timer) { input in
+                                seconds = input.formatSeconds()
+                            }
+                            .frame(width: 30)
+                            .brightness(Double(brightValue))
+                    }
+                    
+                    Spacer()
                 }
-                
                 .frame(width: geo.size.width * 0.8, height: geo.size.height * 0.8)
                 .foregroundColor(.white)
                 .minimumScaleFactor(0.01)
@@ -58,12 +74,11 @@ struct ClockView: View {
                         }
                     }
                 }))
-                
             }
-        }
 #if os(iOS)
-        .statusBar(hidden: true)
+            .statusBar(hidden: true)
 #endif
+        }
     }
 }
 
